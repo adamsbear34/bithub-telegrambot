@@ -135,7 +135,7 @@ const updateAttempt = async (limit) => {
         }));
     } catch (err) {
         console.log(err);
-    }
+    } 
 
     console.log("Last Time Updated: " + lastTimeUpdated);
 }
