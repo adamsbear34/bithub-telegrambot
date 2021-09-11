@@ -42,7 +42,12 @@ var timeUpdated;
 
 //  Functions that is responsible for sending built message to the Telegram Channel 
 const sendMessage = (msg) => {
-    bot.telegram.sendMessage(`${process.env.CHAT_ID}`, msg, {parse_mode: 'HTML', disable_web_page_preview: false});
+    try{
+        bot.telegram.sendMessage(`${process.env.CHAT_ID}`, msg, {parse_mode: 'HTML', disable_web_page_preview: false});
+    }catch(err){
+        console.log(err + ` ${msg}`);
+    }
+    
 };
 
 
@@ -50,25 +55,55 @@ const sendMessage = (msg) => {
 //  Function that builds the message for the telegram post
 const buildPost = (news, limit) => {
     let message = "";
+    let description = '';
+    let tags = '';
 
-    for (let i = 0; i < news.length; i++) {
-        if (i == limit) {
-            break;
-        }
-        
+    if (news.length > 1){
 
-        if (news[i].title && news[i].link) {
-            
-            const description = textFormat(news[i].contentSnippet);
-            const tags =  hashTagsFormat(news[i].categories);
-            
-           message =`
+        for (let i = 0; i < news.length; i++){
+            if (i == limit){
+                break;
+            }
+            if (news[i].title && news[i].link) {
+                description = textFormat(news[i].contentSnippet);
+                tags =  hashTagsFormat(news[i].categories);
+
+                message = message + `
 📰  ${description} <a href="${news[i].link}">далее...</a>
+`;
+            }
+        }
 
+    }else{
+        description = textFormat(news[0].contentSnippet);
+        tags =  hashTagsFormat(news[0].categories);
+
+        message =`
+📰  ${description} <a href="${news[0].link}">далее...</a>
+        
 ${tags}
 `;
-        }
-    }
+    } 
+
+
+//     for (let i = 0; i < news.length; i++) {
+//         if (i == limit) {
+//             break;
+//         }
+        
+
+//         if (news[i].title && news[i].link) {
+            
+//             const description = textFormat(news[i].contentSnippet);
+//             const tags =  hashTagsFormat(news[i].categories);
+            
+//            message =`
+// 📰  ${description} <a href="${news[i].link}">далее...</a>
+
+// ${tags}
+// `;
+//         }
+//     }
 
     return message;
 };
@@ -149,7 +184,7 @@ interval = setInterval(async () => {
     if (!flagOn) {
         clearInterval(interval);
         }
-    }, 600000
+    }, 15000
 );
 
 
