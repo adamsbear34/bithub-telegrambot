@@ -184,7 +184,7 @@ interval = setInterval(async () => {
     if (!flagOn) {
         clearInterval(interval);
         }
-    }, 15000
+    }, 600000
 );
 
 
