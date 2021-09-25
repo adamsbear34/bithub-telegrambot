@@ -52,58 +52,27 @@ const sendMessage = (msg) => {
 
 
 
+
 //  Function that builds the message for the telegram post
 const buildPost = (news, limit) => {
     let message = "";
     let description = '';
     let tags = '';
+ 
 
-    if (news.length > 1){
-
-        for (let i = 0; i < news.length; i++){
-            if (i == limit){
-                break;
-            }
-            if (news[i].title && news[i].link) {
-                description = textFormat(news[i].contentSnippet);
-                tags =  hashTagsFormat(news[i].categories);
-
-                message = message + `
-📰  ${description} <a href="${news[i].link}">далее...</a>
+    for (let i = 0; i < news.length; i++){
+        if (i == limit){
+            break;
+        }
+        if (news[i].title && news[i].link) {
+            description = textFormat(news[i].contentSnippet);
+            tags =  hashTagsFormat(news[i].categories);
+            message = message + `
+💬 ${description} <a href="${news[i].link}">далее...</a>
 `;
             }
         }
-
-    }else{
-        description = textFormat(news[0].contentSnippet);
-        tags =  hashTagsFormat(news[0].categories);
-
-        message =`
-📰  ${description} <a href="${news[0].link}">далее...</a>
         
-${tags}
-`;
-    } 
-
-
-//     for (let i = 0; i < news.length; i++) {
-//         if (i == limit) {
-//             break;
-//         }
-        
-
-//         if (news[i].title && news[i].link) {
-            
-//             const description = textFormat(news[i].contentSnippet);
-//             const tags =  hashTagsFormat(news[i].categories);
-            
-//            message =`
-// 📰  ${description} <a href="${news[i].link}">далее...</a>
-
-// ${tags}
-// `;
-//         }
-//     }
 
     return message;
 };
